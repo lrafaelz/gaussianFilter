@@ -4,11 +4,11 @@ use ieee.numeric_std.all;
 
 
 -- Definindo o testbench
-entity tb_gaussianFilter is
-end tb_gaussianFilter;
+entity tb_gaussianFilter3x3 is
+end tb_gaussianFilter3x3;
     
-architecture behavior of tb_gaussianFilter is
-    component gaussianFilter is
+architecture behavior of tb_gaussianFilter3x3 is
+    component gaussianFilter3x3 is
         port(
             clk     : in std_logic;
             rst     : in std_logic;
@@ -27,21 +27,12 @@ architecture behavior of tb_gaussianFilter is
 
 type matrix_3x3 is array (0 to 2, 0 to 2) of std_logic_vector(7 downto 0);
 signal clk_sg      : std_logic :='0';
-signal rst_sg      : std_logic := '0';
--- signal in_0_sg     : std_logic_vector(7 downto 0);
--- signal in_1_sg     : std_logic_vector(7 downto 0);
--- signal in_2_sg     : std_logic_vector(7 downto 0);
--- signal in_3_sg     : std_logic_vector(7 downto 0);
--- signal in_4_sg     : std_logic_vector(7 downto 0);
--- signal in_5_sg     : std_logic_vector(7 downto 0);
--- signal in_6_sg     : std_logic_vector(7 downto 0);
--- signal in_7_sg     : std_logic_vector(7 downto 0);
--- signal in_8_sg     : std_logic_vector(7 downto 0);
+signal rst_sg      : std_logic := '1';
 signal in_val_sg   : matrix_3x3;
 signal out_val_sg  : std_logic_vector(15 downto 0);
 
 begin
-    inst_top: gaussianFilter
+    inst_top: gaussianFilter3x3
     port map(
         clk     => clk_sg,
         rst     => rst_sg,
@@ -61,7 +52,7 @@ begin
     process
     begin
         wait for 5 ns;
-            rst_sg <= '1';
+            rst_sg <= '0';
             in_val_sg(0, 0) <= "00000001";
             in_val_sg(0, 1) <= "00000001";
             in_val_sg(0, 2) <= "00000001";
