@@ -1,6 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.std_logic_unsigned.all;
+use ieee.std_logic_arith.all;
 use ieee.numeric_std.all;
+
 
 
 entity gaussianFilter3x3 is
@@ -37,65 +40,75 @@ architecture behavioral of gaussianFilter3x3 is
     signal sub_1                : std_logic_vector(15 downto 0);
     signal sub_2                : std_logic_vector(15 downto 0);
     signal sub_3                : std_logic_vector(15 downto 0);
+    -- shift left logical
+    signal sll_0                : std_logic_vector(15 downto 0);
+    signal sll_1                : std_logic_vector(15 downto 0);
+    signal sll_2                : std_logic_vector(15 downto 0);
+    signal sll_3                : std_logic_vector(15 downto 0);
+    signal sll_4                : std_logic_vector(15 downto 0);
+    -- shift right logical
+    signal srl_0                : std_logic_vector(15 downto 0);
+    signal srl_1                : std_logic_vector(15 downto 0);
+    signal srl_2                : std_logic_vector(15 downto 0);
+    signal srl_3                : std_logic_vector(15 downto 0);
+
     begin
         process(clk, rst)
         begin
             if rst = '1' then
-                adder_0 <= (others => '0');
-                adder_1 <= (others => '0');
-                adder_2 <= (others => '0');
-                adder_3 <= (others => '0');
-                adder_4 <= (others => '0');
-                adder_5 <= (others => '0');
-                adder_6 <= (others => '0');
-                adder_7 <= (others => '0');
-                adder_8 <= (others => '0');
-                adder_9 <= (others => '0');
-                adder_10 <= (others => '0');
-                sub_0 <= (others => '0');
-                sub_1 <= (others => '0');
-                sub_2 <= (others => '0');
-                sub_3 <= (others => '0');
+
                 out_val_reg <= (others => '0');
             elsif rising_edge(clk) then
-                -- Line 1
-                adder_0 <= std_logic_vector(unsigned(in_1) + unsigned(in_3));
-                adder_1 <= std_logic_vector(unsigned(in_5) + unsigned(in_7));
-                adder_2 <= std_logic_vector(unsigned(in_0) + unsigned(in_2));
-                adder_3 <= std_logic_vector(unsigned(in_6) + unsigned(in_8));
-                --
-                
-                sub_0 <= std_logic_vector(unsigned((std_logic_vector(unsigned(in_4))) sll 2) - unsigned(in_4));
 
-                -- Line 2
-                adder_4 <= adder_0 + adder_1;
-                adder_5 <= adder_2 + adder_3;
-                --
+                out_val_reg <= adder_10;
+                end if;
+            end process;
+            -- Line 1
+            adder_0 <= std_logic_vector(resize(std_logic_vector(in_1), in_3'length)) + std_logic_vector(resize(std_logic_vector(in_3), in_1'length));
 
-                sub_1 <= (adder_4 sll 4) - adder_4;
-                sub_2 <= (adder_5 sll 4) - adder_5;
+            adder_1 <= in_5 + in_7;
+            adder_2 <= in_0 + in_2;
+            adder_3 <= in_6 + in_8;
+            --                
+            sll_0 <= std_logic_vector(resize(in_4, sll_0'length) sll 2);
+            sub_0 <= sll_0 - in_4;
 
-                -- Line 3
-                adder_6 <= sub_1 + (adder_4 sll 2);
-                adder_7 <= adder_6 + sub_2;
-                --
+            -- Line 2
+            adder_4 <= adder_0 + adder_1;
+            adder_5 <= adder_2 + adder_3;
+            --
 
-                -- Line 4
-                adder_9 <= (sub_0 sll 3) + adder_7;
-                --
+            sll_1 <= to_stdlogicvector(to_bitvector(adder_4) sll 4);
+            sub_1 <= sll_1 - adder_4;
+            sll_2 <= to_stdlogicvector(to_bitvector(adder_5) sll 4);
+            sub_2 <= sll_2 - adder_5;
 
-                sub_3 <= (adder_8 srl 11) - (adder_8 srl 14);
+            -- Line 3
+            sll_3 <= to_stdlogicvector(to_bitvector(adder_4) sll 2);
+            adder_6 <= sub_1 + sll_3;
+            adder_7 <= adder_6 + sub_2;
+            --
 
-                -- Line 5
-                adder_9 <= (adder_8 srl 8) + (adder_8 srl 9);
-                adder_10 <= adder_9 + sub_3;
-                --
-            end if;
-        end process;
-        out_val <= out_val_reg;
+            -- Line 4
+            sll_4 <= to_stdlogicvector(to_bitvector(sub_0) sll 3);
+            adder_9 <= sll_4 + adder_7;
+            --
+
+            srl_0 <= to_stdlogicvector(to_bitvector(adder_8) srl 14);
+            srl_1 <= to_stdlogicvector(to_bitvector(adder_8) srl 11);
+            sub_3 <= srl_1 - srl_0;
+
+            -- Line 5
+            srl_2 <= to_stdlogicvector(to_bitvector(adder_8) srl 8);
+            srl_3 <= to_stdlogicvector(to_bitvector(adder_8) srl 9);
+            adder_9 <= srl_2 + srl_3;
+            adder_10 <= adder_9 + sub_3;
+            --
+
+            out_val <= out_val_reg;
+
+            
 end architecture behavioral;
-
-
 
 
 
