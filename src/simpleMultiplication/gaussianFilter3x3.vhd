@@ -10,48 +10,46 @@ entity gaussianFilter3x3 is
     port (
         clk     : in std_logic;
         rst     : in std_logic;
-        in_0   : in std_logic_vector(7 downto 0);
-        in_1   : in std_logic_vector(7 downto 0);
-        in_2   : in std_logic_vector(7 downto 0);
-        in_3   : in std_logic_vector(7 downto 0);
-        in_4   : in std_logic_vector(7 downto 0);
-        in_5   : in std_logic_vector(7 downto 0);
-        in_6   : in std_logic_vector(7 downto 0);
-        in_7   : in std_logic_vector(7 downto 0);
-        in_8   : in std_logic_vector(7 downto 0);
-        out_val : out std_logic_vector(15 downto 0)
+        in_0   : in std_logic_vector(15 downto 0);
+        in_1   : in std_logic_vector(15 downto 0);
+        in_2   : in std_logic_vector(15 downto 0);
+        in_3   : in std_logic_vector(15 downto 0);
+        in_4   : in std_logic_vector(15 downto 0);
+        in_5   : in std_logic_vector(15 downto 0);
+        in_6   : in std_logic_vector(15 downto 0);
+        in_7   : in std_logic_vector(15 downto 0);
+        in_8   : in std_logic_vector(15 downto 0);
+        out_val : out std_logic_vector(31 downto 0)
         );
         end entity gaussianFilter3x3;
         
         
         architecture behavioral of gaussianFilter3x3 is
-            signal out_val_reg          : std_logic_vector(15 downto 0);
-            signal partial_product_0    : std_logic_vector(15 downto 0);
-            signal partial_product_1    : std_logic_vector(15 downto 0);
-            signal partial_product_2    : std_logic_vector(15 downto 0);
-            signal partial_product_3    : std_logic_vector(15 downto 0);
-            signal partial_product_4    : std_logic_vector(15 downto 0);
-            signal partial_product_5    : std_logic_vector(15 downto 0);
-            signal partial_product_6    : std_logic_vector(15 downto 0);
-            signal partial_product_7    : std_logic_vector(15 downto 0);
-            signal partial_product_8    : std_logic_vector(15 downto 0);
-            signal partial_sum          : std_logic_vector(15 downto 0);
+            signal out_val_reg          : std_logic_vector(31 downto 0);
+            signal partial_product_0    : std_logic_vector(31 downto 0);
+            signal partial_product_1    : std_logic_vector(31 downto 0);
+            signal partial_product_2    : std_logic_vector(31 downto 0);
+            signal partial_product_3    : std_logic_vector(31 downto 0);
+            signal partial_product_4    : std_logic_vector(31 downto 0);
+            signal partial_product_5    : std_logic_vector(31 downto 0);
+            signal partial_product_6    : std_logic_vector(31 downto 0);
+            signal partial_product_7    : std_logic_vector(31 downto 0);
+            signal partial_product_8    : std_logic_vector(31 downto 0);
             -- input registers
-            signal in_0_reg             : std_logic_vector(7 downto 0);
-            signal in_1_reg             : std_logic_vector(7 downto 0);
-            signal in_2_reg             : std_logic_vector(7 downto 0);
-            signal in_3_reg             : std_logic_vector(7 downto 0);
-            signal in_4_reg             : std_logic_vector(7 downto 0);
-            signal in_5_reg             : std_logic_vector(7 downto 0);
-            signal in_6_reg             : std_logic_vector(7 downto 0);
-            signal in_7_reg             : std_logic_vector(7 downto 0);
-            signal in_8_reg             : std_logic_vector(7 downto 0);
+            signal in_0_reg             : std_logic_vector(15 downto 0);
+            signal in_1_reg             : std_logic_vector(15 downto 0);
+            signal in_2_reg             : std_logic_vector(15 downto 0);
+            signal in_3_reg             : std_logic_vector(15 downto 0);
+            signal in_4_reg             : std_logic_vector(15 downto 0);
+            signal in_5_reg             : std_logic_vector(15 downto 0);
+            signal in_6_reg             : std_logic_vector(15 downto 0);
+            signal in_7_reg             : std_logic_vector(15 downto 0);
+            signal in_8_reg             : std_logic_vector(15 downto 0);
             
             begin
             process(clk, rst)
             begin
                 if rst = '1' then
-                    partial_sum <= (others => '0');
                     out_val_reg <= (others => '0');
                     in_0_reg <= (others => '0');
                     in_1_reg <= (others => '0');
